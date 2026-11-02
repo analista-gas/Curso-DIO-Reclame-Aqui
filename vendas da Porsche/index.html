@@ -1,0 +1,376 @@
+
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Porsche Sales Intelligence</title>
+<style>
+:root{--bg:#f4f6f8;--panel:#fff;--ink:#17212b;--muted:#687582;--line:#e3e8ed;--red:#c8102e;--dark:#17212b;--soft:#fff0f2}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif}
+header{background:var(--dark);color:#fff;padding:28px max(22px,calc((100vw - 1200px)/2));border-bottom:4px solid var(--red)}
+.eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.16em;color:#f5a6b3;font-weight:800}
+h1{margin:8px 0 5px;font-size:clamp(25px,4vw,38px)}
+header p{margin:0;color:#c6cdd4;font-size:14px}
+main{max-width:1200px;margin:auto;padding:24px 22px 40px}
+.filters,.kpi,.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px}
+.filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:16px;margin-bottom:16px}
+.filterhead{grid-column:1/-1;display:flex;justify-content:space-between;align-items:center}
+.filterhead button{border:0;background:var(--soft);color:var(--red);padding:8px 12px;border-radius:7px;font-weight:800;cursor:pointer}
+label{display:block;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-bottom:7px}
+select{width:100%;border:1px solid #d7dde3;border-radius:8px;background:#fff;padding:11px;color:var(--ink);font:inherit;font-size:13px}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:16px}
+.kpi{padding:19px}
+.kl{font-size:12px;color:var(--muted);font-weight:700}
+.value{font-size:clamp(24px,3vw,32px);font-weight:850;margin:9px 0 4px;letter-spacing:-.04em}
+.sub{font-size:12px;color:var(--muted)}
+.grid{display:grid;grid-template-columns:1.2fr 1fr;gap:14px}
+.panel{padding:20px;min-width:0}
+.wide{grid-column:1/-1}
+.question{font-size:10px;text-transform:uppercase;letter-spacing:.12em;color:var(--red);font-weight:900}
+.panel h2{font-size:18px;margin:7px 0 5px}
+.desc{font-size:12px;color:var(--muted);margin:0 0 15px}
+.bars{display:flex;flex-direction:column;gap:12px}
+.barrow{display:grid;grid-template-columns:minmax(90px,145px) 1fr auto;gap:10px;align-items:center;font-size:12px}
+.barlabel{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:#3d4955}
+.track{height:11px;border-radius:20px;background:#edf0f3;overflow:hidden}
+.fill{height:100%;border-radius:20px;background:var(--red)}
+.barvalue{font-weight:800;font-variant-numeric:tabular-nums}
+.empty{padding:25px;color:var(--muted);text-align:center}
+.insight{background:#f9fafb;border-left:3px solid var(--red);padding:12px;margin-top:15px;font-size:12px;line-height:1.5;color:#46515c;border-radius:0 8px 8px 0}
+.foot{font-size:11px;color:var(--muted);margin-top:18px;line-height:1.6}
+@media(max-width:760px){
+.filters{grid-template-columns:repeat(2,minmax(0,1fr))}
+.kpis,.grid{grid-template-columns:1fr}
+.wide{grid-column:auto}
+.panel{padding:16px}
+.barrow{grid-template-columns:90px 1fr auto}
+}
+@media(max-width:420px){
+.filters{grid-template-columns:1fr}
+.filterhead{grid-column:auto}
+}
+</style>
+</head>
+<body>
+<header>
+<div class="eyebrow">Sales intelligence · Porsche</div>
+<h1>Visão geral de vendas</h1>
+<p>Desempenho comercial, mix de modelos e perfil de receita — com filtros interativos.</p>
+</header>
+<main>
+<section class="filters">
+<div class="filterhead">
+<strong>Explore os dados</strong>
+<button id="reset">Limpar filtros</button>
+</div>
+<div>
+<label for="modelFilter">Modelo</label>
+<select id="modelFilter"><option value="">Todos os modelos</option></select>
+</div>
+<div>
+<label for="cityFilter">Cidade</label>
+<select id="cityFilter"><option value="">Todas as cidades</option></select>
+</div>
+<div>
+<label for="yearFilter">Ano da venda</label>
+<select id="yearFilter"><option value="">Todos os anos válidos</option></select>
+</div>
+<div>
+<label for="paymentFilter">Método de pagamento</label>
+<select id="paymentFilter"><option value="">Todos os métodos</option></select>
+</div>
+</section>
+
+<section class="kpis">
+<article class="kpi">
+<div class="kl">Vendas no recorte</div>
+<div class="value" id="salesKpi">—</div>
+<div class="sub" id="salesSub">Registros após filtros</div>
+</article>
+<article class="kpi">
+<div class="kl">Receita total</div>
+<div class="value" id="revenueKpi">—</div>
+<div class="sub">Soma do preço sanitizado</div>
+</article>
+<article class="kpi">
+<div class="kl">Ticket médio</div>
+<div class="value" id="ticketKpi">—</div>
+<div class="sub">Receita dividida por vendas com preço</div>
+</article>
+</section>
+
+<section class="grid">
+<article class="panel">
+<div class="question">Pergunta 01 · Mix de receita</div>
+<h2>Quais modelos geram mais receita?</h2>
+<p class="desc">Receita total por modelo, em ordem decrescente.</p>
+<div id="modelChart"></div>
+<div id="modelInsight" class="insight"></div>
+</article>
+<article class="panel">
+<div class="question">Pergunta 02 · Distribuição geográfica</div>
+<h2>Quais cidades concentram mais vendas?</h2>
+<p class="desc">Número de vendas por cidade no recorte selecionado.</p>
+<div id="cityChart"></div>
+<div id="cityInsight" class="insight"></div>
+</article>
+<article class="panel wide">
+<div class="question">Pergunta 03 · Meios de pagamento</div>
+<h2>Como a receita se distribui por método de pagamento?</h2>
+<p class="desc">Comparação da receita por método de pagamento.</p>
+<div id="paymentChart"></div>
+<div id="paymentInsight" class="insight"></div>
+</article>
+</section>
+
+<div class="foot">
+Dashboard interativa · Fonte: planilha sanitizada. Datas inválidas não aparecem no filtro de ano, mas seus registros permanecem nos totais gerais quando os demais filtros correspondem. Valores em USD. Não são exibidos nomes de clientes, vendedores ou identificadores individuais.
+</div>
+</main>
+
+<script>
+// Cada linha: modelo|preço|cidade|pagamento|ano da venda
+// Ano vazio indica data de venda inválida.
+const RAW = `718 Cayman|79500.0|Boston|Credit Card|
+911 Turbo S|235000.0|Seattle|Wire Transfer|2024
+Cayenne Coupe|112750.0|Austin|Financing|2024
+Macan S|68900.0|Denver|Cash|
+Taycan 4S|121000.0|Los Angeles|Bank Transfer|2024
+Panamera 4|104500.0|Miami|Credit Card|2024
+911 Carrera S|96300.0|New York|Lease|2024
+Cayenne E-Hybrid|89750.0|San Diego|Wire Transfer|
+718 Boxster|73500.0|Chicago|Debit Card|2024
+Macan GTS|95000.0|Phoenix|Financing|2024
+Taycan Turbo|153200.5|Dallas|ACH Payment|2024
+911 GT3|241000.0|Las Vegas|Wire Transfer|
+Panamera Turbo S|132000.0|San Jose|Cash|2024
+Cayenne Turbo GT|188000.0|Houston|Crypto Payment|2024
+911 Carrera Cabriolet|127800.0|Atlanta|Credit Card|2024
+Macan|58900.0|Orlando|Bank Transfer|2025
+718 Spyder RS|164000.0|Portland|Financing|
+Taycan Cross Turismo|118500.0|Charlotte|Wire Transfer|2025
+Cayenne S|91300.0|Nashville|Credit Card|
+911 Targa 4S|158750.0|Minneapolis|Lease|2025
+Panamera|72000.0|Philadelphia|Bank Transfer|2025
+Macan Electric|86500.0|San Antonio|Wire Transfer|2025
+911 Dakar|270000.0|Salt Lake City|Cash|
+Taycan GTS|139000.0|Raleigh|Financing|2025
+Cayenne|76800.0|Detroit|Credit Card|2025
+718 Cayman GT4 RS|173600.0|Columbus|Wire Transfer|
+911 Carrera GTS|119900.0|Indianapolis|Cash|2025
+Panamera 4 E-Hybrid|109250.0|Fort Worth|Lease|2025
+Macan T|82000.0|Jacksonville|Wire Transfer|2025
+Taycan Turbo S|214000.0|San Diego|Crypto Payment|2025
+911 Carrera|124500.0|Tampa|Credit Card|
+Cayenne S|98200.0|Sacramento|Bank Transfer|2025
+Macan|67500.0|Cleveland|Financing|2025
+Taycan|116900.0|Milwaukee|Wire Transfer|2025
+Panamera 4S|112000.0|Kansas City|Cash|2025
+718 Boxster|74000.0|Omaha|Debit Card|2025
+911 Turbo|198300.0|Albuquerque|Wire Transfer|2025
+Cayenne Coupe|103750.0|Tucson|Wire Transfer|
+Macan GTS|93600.0|Fresno|Financing|
+Taycan 4S|129000.0|Virginia Beach|ACH Payment|2025
+Panamera Turbo|136000.0|Colorado Springs|Credit Card|2025
+911 GT3 RS|286500.0|Arlington|Wire Transfer|
+Cayenne E-Hybrid|92800.0|Bakersfield|Lease|2026
+Macan T|72400.0|Mesa|Cash|2026
+Taycan Turbo|158500.0|Atlanta|Crypto Payment|2026
+718 Cayman|69900.0|Long Beach|Bank Transfer|2026
+911 Targa 4|141250.0|Oakland|Financing|
+Panamera|71500.0|Tulsa|Wire Transfer|2026
+Cayenne Turbo|146800.0|Wichita|Credit Card|2026
+Macan Electric|89700.0|New Orleans|Lease|2026
+911 Carrera S|104600.0|Honolulu|Bank Transfer|2026
+Taycan GTS|142000.0|Anaheim|Wire Transfer|
+Cayenne|78400.0|Henderson|Cash|2026
+718 Spyder RS|169000.0|Lexington|Financing|
+911 Dakar|268900.0|Riverside|Credit Card|2026
+Panamera 4|101300.0|Corpus Christi|Wire Transfer|2026
+Macan S|66750.0|St. Louis|Cash|2026
+Taycan Cross Turismo|127900.0|Pittsburgh|Lease|2026
+Cayenne Turbo GT|200000.0|Cincinnati|Wire Transfer|2026
+911 Carrera Cabriolet|132000.0|Anchorage|Crypto Payment|2026
+718 Cayman GT4 RS|176400.0|Plano|Credit Card|2026
+Panamera 4 E-Hybrid|108500.0|Newark|Bank Transfer|
+Macan|59000.0|Greensboro|Financing|2026
+Taycan Turbo S|218000.0|Lincoln|Wire Transfer|2026
+Cayenne S|99950.0|Jersey City|Debit Card|
+911 Carrera GTS|121750.0|Chandler|Credit Card|2026
+718 Boxster GTS|91500.0|Reno|Lease|2026
+Panamera Turbo S|134000.0|Buffalo|Wire Transfer|2026
+Macan GTS|96800.0|Durham|ACH Payment|2026
+Taycan 4S|131600.0|Laredo|Wire Transfer|2026
+Cayenne E-Hybrid|94300.0|Madison|Cash|2026
+911 Turbo S|242000.0|Lubbock|Crypto Payment|2026
+718 Cayman S|82750.0|Toledo|Credit Card|2026
+Macan Electric|91300.0|Irvine|Wire Transfer|2026
+Panamera|79900.0|Garland|Financing|2026
+Cayenne Coupe|111000.0|Irving|Bank Transfer|
+911 Targa 4S|156500.0|Chesapeake|Cash|2026
+Taycan|119900.0|Scottsdale|Lease|2026
+Macan T|73200.0|Norfolk|Wire Transfer|
+911 GT3|224000.0|Boise|Wire Transfer|2026
+911 Carrera|126900.0|Orlando|Credit Card|2027
+Cayenne|84500.0|San Jose|Bank Transfer|2027
+Macan S|69800.0|Tampa|Financing|2027
+Taycan 4S|132700.0|Denver|Wire Transfer|
+Panamera|81000.0|Austin|Cash|2027
+718 Cayman|78900.0|Seattle|Debit Card|2027
+911 Turbo S|249300.0|Boston|Wire Transfer|2027
+Cayenne Coupe|108750.0|Phoenix|Wire Transfer|
+Macan Electric|92600.0|Chicago|Financing|
+Taycan Turbo|164000.0|Dallas|ACH Payment|2027
+Panamera 4S|119000.0|San Francisco|Credit Card|2027
+911 GT3|232500.0|Las Vegas|Wire Transfer|
+Cayenne E-Hybrid|96800.0|Charlotte|Lease|2027
+Macan T|74400.0|Mesa|Cash|2027
+Taycan GTS|148500.0|Atlanta|Crypto Payment|2027
+718 Boxster|71900.0|Long Beach|Bank Transfer|2027
+911 Targa 4|143250.0|Oakland|Financing|
+Panamera Turbo|137500.0|Tulsa|Wire Transfer|2027
+Cayenne Turbo GT|204800.0|Wichita|Credit Card|2027
+911 Dakar|271700.0|New Orleans|Lease|2027`;
+
+const DATA = RAW.trim().split('\n').map(line => {
+  const [model, price, city, payment, year] = line.split('|');
+  return {
+    model,
+    price: Number(price),
+    city,
+    payment,
+    year: year ? Number(year) : null
+  };
+});
+
+const $ = id => document.getElementById(id);
+const money = n => new Intl.NumberFormat('en-US', {
+  style: 'currency',
+  currency: 'USD',
+  maximumFractionDigits: 0
+}).format(n || 0);
+const integer = n => new Intl.NumberFormat('pt-BR', {
+  maximumFractionDigits: 0
+}).format(n || 0);
+
+const unique = a => [...new Set(
+  a.filter(v => v !== null && v !== undefined && v !== '')
+)].sort((a, b) =>
+  String(a).localeCompare(String(b), 'pt-BR', { numeric: true })
+);
+
+function fillSelect(id, values) {
+  for (const v of unique(values)) {
+    const o = document.createElement('option');
+    o.value = String(v);
+    o.textContent = String(v);
+    $(id).appendChild(o);
+  }
+}
+
+fillSelect('modelFilter', DATA.map(d => d.model));
+fillSelect('cityFilter', DATA.map(d => d.city));
+fillSelect('yearFilter', DATA.map(d => d.year));
+fillSelect('paymentFilter', DATA.map(d => d.payment));
+
+['modelFilter', 'cityFilter', 'yearFilter', 'paymentFilter']
+  .forEach(id => $(id).addEventListener('change', render));
+
+$('reset').addEventListener('click', () => {
+  ['modelFilter', 'cityFilter', 'yearFilter', 'paymentFilter']
+    .forEach(id => $(id).value = '');
+  render();
+});
+
+function filtered() {
+  return DATA.filter(d =>
+    (!$('modelFilter').value || d.model === $('modelFilter').value) &&
+    (!$('cityFilter').value || d.city === $('cityFilter').value) &&
+    (!$('yearFilter').value || String(d.year) === $('yearFilter').value) &&
+    (!$('paymentFilter').value || d.payment === $('paymentFilter').value)
+  );
+}
+
+function aggregate(rows, key, metric) {
+  const m = new Map();
+  rows.forEach(d => {
+    const k = d[key] || 'Unknown';
+    if (!m.has(k)) m.set(k, { name: k, value: 0 });
+    m.get(k).value += metric === 'count' ? 1 : (Number(d.price) || 0);
+  });
+  return [...m.values()].sort((a, b) => b.value - a.value);
+}
+
+function esc(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;',
+    '"': '&quot;',
+    "'": '&#39;'
+  }[c]));
+}
+
+function bars(id, items, fmt) {
+  const el = $(id);
+  el.className = 'bars';
+
+  if (!items.length) {
+    el.innerHTML = '<div class="empty">Sem dados para este recorte</div>';
+    return;
+  }
+
+  const max = Math.max(...items.map(x => x.value), 1);
+
+  el.innerHTML = items.slice(0, 8).map(x => `
+    <div class="barrow">
+      <div class="barlabel" title="${esc(x.name)}">${esc(x.name)}</div>
+      <div class="track">
+        <div class="fill" style="width:${Math.max(1, x.value / max * 100)}%"></div>
+      </div>
+      <div class="barvalue">${fmt(x.value)}</div>
+    </div>
+  `).join('');
+}
+
+function render() {
+  const rows = filtered();
+  const valid = rows.filter(d => Number.isFinite(d.price));
+  const revenue = valid.reduce((s, d) => s + d.price, 0);
+
+  $('salesKpi').textContent = integer(rows.length);
+  $('salesSub').textContent = `${integer(valid.length)} venda(s) com preço válido`;
+  $('revenueKpi').textContent = money(revenue);
+  $('ticketKpi').textContent = money(valid.length ? revenue / valid.length : 0);
+
+  const models = aggregate(rows, 'model', 'sum').filter(x => x.value > 0);
+  bars('modelChart', models, money);
+
+  let top = models[0];
+  $('modelInsight').textContent = top
+    ? `${top.name} lidera a receita neste recorte com ${money(top.value)} (${revenue ? Math.round(top.value / revenue * 100) : 0}% da receita filtrada).`
+    : 'Não há preços válidos para comparar modelos.';
+
+  const cities = aggregate(rows, 'city', 'count');
+  bars('cityChart', cities, integer);
+
+  top = cities[0];
+  $('cityInsight').textContent = top
+    ? `${top.name} tem o maior número de registros: ${integer(top.value)} venda(s) no recorte.`
+    : 'Não há vendas para este recorte.';
+
+  const pays = aggregate(rows, 'payment', 'sum').filter(x => x.value > 0);
+  bars('paymentChart', pays, money);
+
+  top = pays[0];
+  $('paymentInsight').textContent = top
+    ? `${top.name} é o método com maior receita (${money(top.value)}; ${revenue ? Math.round(top.value / revenue * 100) : 0}% da receita filtrada).`
+    : 'Não há preços válidos para comparar métodos.';
+}
+
+render();
+</script>
+</body>
+</html>
