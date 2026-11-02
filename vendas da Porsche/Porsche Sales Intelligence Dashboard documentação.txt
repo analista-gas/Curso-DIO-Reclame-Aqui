@@ -1,0 +1,174 @@
+
+# Porsche Sales Intelligence Dashboard
+
+Dashboard interativa de análise de vendas de veículos Porsche, desenvolvida em HTML, CSS e JavaScript. O projeto permite explorar os dados por meio de filtros, indicadores e gráficos para apoiar a análise comercial.
+
+## 1. Objetivo do projeto
+
+O objetivo é transformar uma planilha de vendas em uma dashboard visual e interativa, permitindo identificar modelos com maior receita, cidades com maior volume de vendas e a participação dos métodos de pagamento.
+
+A dashboard foi desenvolvida como um arquivo HTML único, sem necessidade de frameworks ou bibliotecas externas.
+
+## 2. Perguntas de negócio escolhidas
+
+### Pergunta 1 — Quais modelos geram mais receita?
+
+**Visualização:** gráfico de barras com a receita total por modelo.
+
+**Justificativa:** identificar os modelos que mais contribuem para o faturamento ajuda a compreender o desempenho comercial do portfólio e a orientar decisões de estoque, divulgação e estratégia de vendas.
+
+### Pergunta 2 — Quais cidades concentram mais vendas?
+
+**Visualização:** gráfico de barras com a quantidade de vendas por cidade.
+
+**Justificativa:** conhecer a distribuição geográfica das vendas ajuda a identificar mercados com maior atividade comercial e oportunidades para campanhas regionais.
+
+### Pergunta 3 — Como a receita se distribui por método de pagamento?
+
+**Visualização:** gráfico de barras com a receita por método de pagamento.
+
+**Justificativa:** entender a participação dos diferentes métodos de pagamento ajuda a analisar o perfil dos recebimentos e a composição financeira das vendas.
+
+## 3. Indicadores e filtros
+
+A dashboard apresenta três indicadores principais:
+
+- **Total de vendas:** quantidade de registros considerados no recorte selecionado.
+- **Receita total:** soma dos preços dos veículos.
+- **Ticket médio:** receita total dividida pela quantidade de vendas com preço válido.
+
+Os filtros disponíveis são:
+
+- Modelo do veículo;
+- Cidade;
+- Ano da venda;
+- Método de pagamento.
+
+Os indicadores, gráficos e textos de interpretação são atualizados conforme os filtros selecionados. O botão **Limpar filtros** restaura a visualização geral.
+
+## 4. Identidade visual
+
+Foi adotada uma identidade visual inspirada no universo da Porsche, com aparência executiva e minimalista.
+
+- **Vermelho:** destaque para gráficos e elementos importantes.
+- **Carvão:** cabeçalho e contraste visual.
+- **Branco:** cartões e áreas de conteúdo.
+- **Cinza-claro:** fundo e elementos de apoio.
+- **Tipografia:** fonte sem serifa, priorizando legibilidade.
+
+O layout é responsivo e se adapta a diferentes tamanhos de tela, incluindo computadores, tablets e celulares.
+
+## 5. Tratamento dos dados
+
+A base utilizada foi a planilha sanitizada de vendas Porsche fornecida para a atividade.
+
+Antes da publicação, foram consideradas as seguintes práticas:
+
+1. Utilização de campos sanitizados para modelo, preço, cidade, método de pagamento e data da venda.
+2. Conversão dos preços para valores numéricos.
+3. Tratamento dos anos de venda para uso nos filtros.
+4. Exclusão de nomes de clientes, vendedores e identificadores individuais da visualização.
+5. Tratamento de datas inválidas, que não são disponibilizadas como opções no filtro de ano.
+6. Verificação para evitar a exposição de informações pessoais ou confidenciais.
+
+Os valores monetários são apresentados em dólares americanos (USD), conforme a base de origem.
+
+**Observação importante:** os dados utilizados no HTML ficam incorporados ao próprio arquivo. Antes de publicar o projeto em um repositório público, é necessário verificar se a base não contém informações confidenciais ou pessoais.
+
+## 6. Prompt utilizado para gerar a dashboard
+
+O prompt de referência utilizado para orientar a construção da dashboard foi:
+
+> Crie uma dashboard de vendas Porsche em um único arquivo `index.html`, utilizando HTML, CSS e JavaScript. Utilize somente campos sanitizados da planilha e não exponha nomes de clientes, vendedores ou identificadores individuais.
+>
+> Inclua filtros interativos por modelo, cidade, ano da venda e método de pagamento. Apresente indicadores no topo para quantidade de vendas, receita total e ticket médio.
+>
+> A dashboard deve responder a três perguntas de negócio:
+>
+> 1. Quais modelos geram mais receita?
+> 2. Quais cidades concentram mais vendas?
+> 3. Como a receita se distribui por método de pagamento?
+>
+> Utilize gráficos de barras e faça com que todos os filtros atualizem os indicadores, gráficos e textos explicativos.
+>
+> Adote um estilo visual executivo inspirado na identidade Porsche, com vermelho, carvão, branco e cinza. Utilize cartões, tipografia sem serifa e layout responsivo.
+>
+> O arquivo deve funcionar localmente e no GitHub Pages, sem depender de frameworks ou serviços externos.
+
+## 7. Refinamentos realizados
+
+A versão final foi organizada para priorizar perguntas de negócio claras, em vez de apresentar gráficos sem contexto.
+
+Os principais refinamentos incluem:
+
+- Separação da análise em três perguntas de negócio;
+- Inclusão de filtros combináveis;
+- Atualização dinâmica dos indicadores;
+- Inclusão de textos que destacam os principais resultados;
+- Padronização da identidade visual;
+- Adaptação do layout para dispositivos móveis;
+- Redução da exposição de dados pessoais;
+- Organização do projeto para publicação como site estático.
+
+O desenvolvimento foi realizado com assistência do ChatGPT, utilizando HTML, CSS e JavaScript.
+
+## 8. Estrutura do projeto
+
+O repositório contém os seguintes arquivos:
+
+```text
+porsche-sales-dashboard/
+├── index.html
+└── README.md
+```
+
+- `index.html`: código da dashboard, estilos, lógica dos filtros e dados incorporados.
+- `README.md`: documentação do projeto, perguntas de negócio, decisões de desenvolvimento e instruções de publicação.
+
+A planilha original não precisa ser publicada no repositório, pois os dados utilizados pela dashboard estão incorporados ao HTML.
+
+## 9. Como executar localmente
+
+1. Baixe ou copie o arquivo `index.html`.
+2. Salve-o em uma pasta do computador.
+3. Abra o arquivo com um navegador moderno, como Google Chrome ou Microsoft Edge.
+4. Utilize os filtros para explorar os dados.
+
+Não é necessário instalar Python, Node.js ou qualquer outro ambiente de desenvolvimento para executar a versão estática.
+
+## 10. Como publicar no GitHub Pages
+
+1. Crie um repositório público chamado `porsche-sales-dashboard`.
+2. Envie `index.html` e `README.md` para a raiz do repositório.
+3. Acesse **Settings → Pages**.
+4. Selecione a opção de publicação pela branch principal (`main`) e pela pasta raiz (`/(root)`).
+5. Salve as configurações e aguarde a publicação.
+6. Acesse o endereço fornecido pelo GitHub Pages para testar a dashboard.
+
+Documentação oficial: https://docs.github.com/en/pages/quickstart
+
+## 11. Links do projeto
+
+- **Repositório GitHub:** [INSERIR LINK DO REPOSITÓRIO]
+- **Dashboard publicada:** [INSERIR LINK DO GITHUB PAGES]
+
+Os endereços acima devem ser preenchidos após a criação do repositório e a publicação efetiva do site.
+
+## 12. Evidências de funcionamento
+
+Para demonstrar o funcionamento do projeto, recomenda-se incluir:
+
+- Uma captura de tela da dashboard com os indicadores e gráficos;
+- Uma captura de tela com filtros aplicados;
+- O endereço público da dashboard;
+- O endereço do repositório público.
+
+Essas evidências ajudam a demonstrar que o projeto está funcional e que as perguntas de negócio orientaram a construção da análise.
+
+## 13. Conclusão
+
+A Porsche Sales Intelligence Dashboard demonstra como dados organizados podem ser transformados em informações úteis para a tomada de decisão.
+
+Ao combinar indicadores, filtros interativos e visualizações relacionadas a perguntas de negócio, o projeto facilita a exploração dos dados e contribui para uma análise comercial mais objetiva.
+
+A atividade também demonstra a aplicação de ferramentas de inteligência artificial como apoio ao desenvolvimento, com atenção ao tratamento dos dados, à experiência do usuário e à documentação das decisões técnicas.
