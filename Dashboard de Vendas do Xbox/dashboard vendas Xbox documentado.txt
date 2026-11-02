@@ -1,0 +1,16 @@
+﻿
+O que foi construído nesta planilha (Dashboard_Vendas_Xbox.xlsx)
+1. Aba Dashboard (Layout Fiel à Imagem):
+	* Tema Dark Moderno: Fundo escuro azulado (#111923) com cards em containers azul-petróleo (#1A2332) e detalhes em dourado (#F5B014) e verde-água (#14B8A6).
+	* KPIs Superiores (Canto Esquerdo):
+		* TOTAL VENDAS: R$ 16.250,00+ em destaque dourado. 
+		* TOTAL LEADS: Métrica de 1.460+ em destaque verde-água. 
+	* Gráfico Dias Entre Etapas do Funil de Vendas: Gráfico horizontal medindo o tempo médio de estagnação por etapa (Busca, Oferta, Negociação, Acordo). 
+	* Gráfico Classificação dos Vendedores: Barras horizontais ordenadas por receita. 
+	* Gráfico Origem de Clientes: Rosca/Donut com percentuais de conversão por origem (Chamadas, Apresentações, E-mail, Landing Page). 
+	* Gráfico Vendas & Leads por Canal: Comparativo de barras verticais. 
+	* Matriz de Taxa de Rejeição: Tabela formatada por vendedor vs. etapa do funil com células com iluminação condicional. 
+	* Painel Lateral "TOP 5 VENDEDORES XBOX": Ranking numerado com medalhas douradas indicando o desempenho dos consultores (Raphael Soares, Beatriz Linhares, Frederico Oliveira, Flávia Almeida e Otávio Pereira). 
+2. Abas Dados_Vendas e Analises_KPIs:
+	* Contém a base bruta de vendas (Consoles, Jogos, Assinaturas e Acessórios) associadas aos vendedores e canais.
+	* Fórmulas automáticas (SUMIF, SUM) que atualizam instantaneamente todo o dashboard caso novos dados sejam inseridos. 
