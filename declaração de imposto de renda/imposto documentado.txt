@@ -1,0 +1,30 @@
+﻿📊 Estrutura e Recursos da Ferramenta (projeto_imposto.xlsx)
+A ferramenta foi projetada para atuar como um Agregador Financeiro Executivo, totalmente parametrizada com fórmulas dinâmicas, validações de consistência e interface padronizada.
+
+1. Painel Resumo & Dashboard (Resumo_IRPF)
+* Cartões de KPI: Exibe em destaque no topo os totais consolidados de Rendimentos Tributáveis, Rendimentos Isentos, Deduções Legais e Imposto Retido/Pago.
+* Menu de Navegação: Tabela com atalhos conceituais organizados por módulos da declaração.
+* Simulador de Modelos (Simplificado vs. Completo):
+	* Aplica o desconto simplificado de 20% (com teto legal parametrizado).
+	* Calcula e compara a base de cálculo entre a Declaração Completa e a Simplificada.
+2. Rendimentos Tributáveis (Rendimentos)
+* Módulo para inserção de salários, pró-labores, aposentadorias, honorários e aluguéis.
+* Validação Automática: Fórmula que verifica se o documento informado possui o tamanho correto de caracteres de CPF (11 dígitos) ou CNPJ (14 dígitos).
+3. Rendimentos Isentos e Não Tributáveis (Rendimentos_Isentos)
+* Destinado ao controle de lucros/dividendos, rendimentos de poupança, FIIs, doações, indenizações e FGTS.
+4. Deduções Legais (Deducoes)
+* Módulo de controle de despesas médicas, instrução/educação, dependentes e contribuições para previdência privada (PGBL).
+* Validação de Comprovantes: Lista suspensa (Dropdown) com validação SIM / NÃO e alerta visual para documentos pendentes.
+5. Imposto Retido e Recolhimentos (Imposto_Retido)
+* Consolida os valores de IRRF retidos em folha/investimentos e os pagamentos mensais via Carnê-Leão (DARF).
+6. Bens e Direitos (Bens_e_Direitos)
+* Acompanhamento de imóveis, veículos, saldos bancários, ações e investimentos.
+* Variação Patrimonial: Calcula automaticamente a diferença de saldo entre 31/12/Ano Anterior e 31/12/Ano Atual.
+7. Dívidas e Ônus Reais (Dividas_e_Onus)
+* Registro de empréstimos e financiamentos acima do teto estipulado pela Receita Federal, com cálculo de amortização/saldo pago no ano.
+8. Validação & Checklist (Validacoes)
+* Checklist de Documentação: Painel para marcar os comprovantes físicos/digitais em mãos e identificar instantaneamente o que ainda falta obter antes do envio da declaração.
+🎨 Padrão Visual e Usabilidade
+* Paleta de Cores: Executive Navy & Teal (Tons sóbrios de azul e cinza com excelente contraste e legibilidade).
+* Formatos Numéricos: Formatado como moeda (R$ #,##0.00) em todas as tabelas e somatórios.
+* Linhas de Grade Habilitadas: Todas as abas mantêm a estrutura visual clássica de grade do Excel.
